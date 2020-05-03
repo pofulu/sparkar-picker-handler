@@ -1,0 +1,32 @@
+{
+  "name": "sparkar-picker-handler",
+  "version": "0.1.2",
+  "description": "A wrapper of NativeUI.picker in Spark AR",
+  "main": "PickerHandler.js",
+  "author": "Pofu Lu",
+  "keywords": [
+    "sparkar",
+    "picker",
+    "handler",
+    "ui",
+    "pofu"
+  ],
+  "files": [
+    "./PickerHandler.js"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pofulu/sparkar-picker-handler.git"
+  },
+  "bugs": {
+    "url": "https://github.com/pofulu/sparkar-picker-handler/issues"
+  },
+  "homepage": "https://github.com/pofulu/sparkar-picker-handler#readme",
+  "license": "MIT",
+  "dependencies": {
+    "sparkar-invoke": "^0.2.4"
+  }
+}
