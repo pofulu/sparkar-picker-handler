@@ -106,7 +106,7 @@ export function subscribeIndex(index, callback) {
 export function subscribeKeywords(textureNameKeyword, callback) {
     const sub = Picker.selectedIndex.monitor({ fireOnInitialValue: true }).select('newValue').subscribe(index => {
         const indexInRange = index >= 0 && index < currentConfig.items.length;
-        if (indexInRange && currentConfig.items[index].image_texture.name.includes(textureNameKeyword)) {
+        if (indexInRange && currentConfig.items[index].image_texture.name.indexOf(textureNameKeyword) !== -1) {
             callback(index)
         }
     })
