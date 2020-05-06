@@ -50,8 +50,25 @@
 
 
 
-
 ## Usage
+
+```javascript
+// Picker.configUsingPattern('img_picker_*').then(subscribeFunctions);
+// Picker.configUsingNames(['img_picker_0', 'img_picker_1']).then(subscribeFunctions);
+Picker.configUsingDafault().then(subscribeFunctions);
+
+function subscribeFunctions() {
+    Picker.subscribeKeywords('0', () => Diagnostics.log('select img_picker_0'));
+    Picker.subscribeKeywords('1', () => Diagnostics.log('select img_picker_1'));
+
+    Picker.subscribeIndex(0, () => Diagnostics.log('select picker index 0'));
+    Picker.subscribeIndex(1, () => Diagnostics.log('select picker index 1'));
+
+    Picker.subscribeKeywords('picker', index => Diagnostics.log(`currentIndex: ${index}`));
+}
+```
+
+
 
 ### Default configure
 
