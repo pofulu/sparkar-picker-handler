@@ -10,8 +10,6 @@
 
 0. [Download PickerHandler](https://raw.githubusercontent.com/pofulu/sparkar-picker-handler/master/PickerHandlerDemo/single/scripts/PickerHandler.js) (Right click and Save as)
 
-1. [Download Invoke](https://raw.githubusercontent.com/pofulu/sparkar-picker-handler/master/PickerHandlerDemo/single/scripts/Invoke.js) (Right click and Save as)
-
 2. Drap/Import them to Assets caetgory in Spark AR.
 
 3. Use `require` to import this module at the top of your script.
@@ -137,3 +135,5 @@ Picker.configUsingDefault().then(() => {
 `unsubscribeAll()`: Unsubscribe all selceted function.
 
 `setIndex()`: Set PickerHandler to desired index.
+
+`setVisible()`: Set PickerHandler to desired index.
