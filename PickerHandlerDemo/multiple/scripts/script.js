@@ -26,7 +26,7 @@ function config_picker_set1() {
 
 function initPicker() {
     Picker.unsubscribeAll();
-    Picker.configUsingPattern('img_picker_set0_*', -1, sort_set0).then(() => {
+    Picker.configUsingPattern('img_picker_set0_*', 0, sort_set0).then(() => {
         Picker.subscribeKeywords('1', config_picker_set1);
         Picker.subscribeKeywords('2', config_picker_set2);
     })

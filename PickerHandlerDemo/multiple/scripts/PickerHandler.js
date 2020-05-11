@@ -1,5 +1,3 @@
-import { onSetSignalThen } from './Invoke';
-
 const NativeUI = require('NativeUI');
 const Textures = require('Textures');
 const Reactive = require('Reactive');
@@ -22,13 +20,11 @@ let subscriptions = [];
 
 function configure(textures, startIndex) {
     currentConfig = {
-        selectedIndex: -1,
+        selectedIndex: startIndex,
         items: textures.map(i => ({ image_texture: i }))
     };
 
-    Picker.configure(currentConfig);
-
-    return onSetSignalThen(NativeUI.picker.selectedIndex, () => Picker.selectedIndex = Reactive.val(startIndex));
+    Picker.configure(currentConfig)
 }
 
 function HandleError(error) {

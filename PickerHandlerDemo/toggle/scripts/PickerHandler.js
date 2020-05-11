@@ -7,9 +7,16 @@ const Picker = NativeUI.picker;
 //–––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– DEFAULT
 const initalIndex = 0;
 const texturesName = [
+    'img_picker_0',
     'img_picker_1',
     'img_picker_2',
     'img_picker_3',
+    'img_picker_4',
+    'img_picker_5',
+    'img_picker_6',
+    'img_picker_7',
+    'img_picker_8',
+    'img_picker_9',
 ];
 
 //––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––

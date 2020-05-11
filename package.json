@@ -25,8 +25,5 @@
     "url": "https://github.com/pofulu/sparkar-picker-handler/issues"
   },
   "homepage": "https://github.com/pofulu/sparkar-picker-handler#readme",
-  "license": "MIT",
-  "dependencies": {
-    "sparkar-invoke": "^0.2.4"
-  }
+  "license": "MIT"
 }
