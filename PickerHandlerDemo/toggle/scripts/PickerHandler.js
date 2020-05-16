@@ -21,6 +21,7 @@ const texturesName = [
 
 //––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 
+let visibleIndexSubscription;
 let currentConfig;
 let currentSubscriptions = [];
 let subscriptions = [];
@@ -98,7 +99,7 @@ export function configUsingPattern(namePattern, startIndex = 0, sort = (name1, n
  * Please note that Picker's index will **ALWAYS** set to `0` on Facebook when you set visible from `false` to `true`.
  * @param {BoolSignal | boolean} visible 
  */
-export function setVisible(visible) {
+export function setVisible(visible, fireOnVisible = true) {
     Picker.visible = visible;
 
     if (currentConfig == null) return;
@@ -107,18 +108,37 @@ export function setVisible(visible) {
         subscriptions.forEach(s => s.unsubscribe());
         subscriptions = [];
 
-        currentSubscriptions.forEach(subscription => {
-            switch (subscription.type) {
-                case 0: subscribeIndex(subscription.conditions, subscription.event); break;
-                case 1: subscribeKeywords(subscription.conditions, subscription.event); break;
-                default: break;
-            }
+        if (fireOnVisible) {
+            currentSubscriptions.forEach(subscription => {
+                switch (subscription.type) {
+                    case 0: subscribeIndex(subscription.conditions, subscription.event); break;
+                    case 1: subscribeKeywords(subscription.conditions, subscription.event); break;
+                    default: break;
+                }
 
-            removeItemOnce(currentSubscriptions, subscription);
-        })
+                removeItemOnce(currentSubscriptions, subscription);
+            })
+            Picker.configure(currentConfig);
+        } else {
+            Picker.configure(currentConfig);
+            visibleIndexSubscription = Picker.selectedIndex.monitor().subscribe(() => {
+                currentSubscriptions.forEach(subscription => {
+                    switch (subscription.type) {
+                        case 0: subscribeIndex(subscription.conditions, subscription.event); break;
+                        case 1: subscribeKeywords(subscription.conditions, subscription.event); break;
+                        default: break;
+                    }
 
-        Picker.configure(currentConfig);
+                    removeItemOnce(currentSubscriptions, subscription);
+                })
+                visibleIndexSubscription.unsubscribe();
+            })
+        }
     } else {
+        if (visibleIndexSubscription != undefined) {
+            visibleIndexSubscription.unsubscribe();
+        }
+
         subscriptions.forEach(s => s.unsubscribe());
         subscriptions = [];
         Picker.configure({ selectedIndex: currentConfig.selectedIndex, items: [] });
@@ -156,6 +176,9 @@ export function subscribeKeywords(textureNameKeyword, callback) {
 }
 
 export function unsubscribeAll() {
+    if (visibleIndexSubscription != undefined) {
+        visibleIndexSubscription.unsubscribe();
+    }
     subscriptions.forEach(s => s.unsubscribe());
     subscriptions = [];
     currentSubscriptions = [];
