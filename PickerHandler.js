@@ -185,8 +185,7 @@ export function unsubscribeAll() {
 }
 
 export function setIndex(toIndex) {
-    currentConfig.selectedIndex = toIndex;
-    Picker.configure(currentConfig);
+    Picker.selectedIndex = toIndex;
 }
 
 export default Picker;
