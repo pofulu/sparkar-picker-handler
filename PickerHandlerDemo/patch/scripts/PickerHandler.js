@@ -146,13 +146,15 @@ export function setVisible(visible, fireOnVisible = true) {
 }
 /**
  * @param {number | ScalarSignal} index
- * @param {{(index: number): void}} callback
+ * @param {{(index: {newValue: number, oldValue?:number}): void}} callback 
  */
 export function subscribeIndex(index, callback) {
     currentSubscriptions.push({ type: 0, conditions: index, event: callback });
-    const sub = Picker.selectedIndex.eq(index).onOn({ fireOnInitialValue: true }).subscribe(index => {
-        currentConfig.selectedIndex = index;
-        callback(index);
+    const sub = Picker.selectedIndex.monitor({ fireOnInitialValue: true }).subscribe(result => {
+        if (result.newValue == index) {
+            currentConfig.selectedIndex = index;
+            callback(result);
+        }
     });
     subscriptions.push(sub);
     return sub;

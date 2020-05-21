@@ -62,7 +62,7 @@ function subscribeFunctions() {
     Picker.subscribeIndex(0, () => Diagnostics.log('select picker index 0'));
     Picker.subscribeIndex(1, () => Diagnostics.log('select picker index 1'));
 
-    Picker.subscribeKeywords('picker', index => Diagnostics.log(`currentIndex: ${index}`));
+    Picker.subscribeKeywords('picker', ind => Diagnostics.log(`cur: ${ind.newValue}`));
 }
 ```
 
