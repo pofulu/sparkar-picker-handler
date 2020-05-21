@@ -11,7 +11,7 @@ Picker.setVisible(true);
 Picker.configUsingDafault().then(subscribeFunctions);
 
 function subscribeFunctions() {
-    Picker.subscribeKeywords('picker', index => Patches.inputs.setScalar('picker', index));
+    Picker.subscribeKeywords('picker', index => Patches.inputs.setScalar('picker', index.newValue));
 }
 
 function sortReverse(textureName1, textureName2) {

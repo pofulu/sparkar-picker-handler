@@ -21,7 +21,7 @@ function subscribeFunctions() {
     Picker.subscribeIndex(3, () => Diagnostics.log('call event when index is 3'));
     Picker.subscribeIndex(4, () => Diagnostics.log('call event when index is 4'));
 
-    Picker.subscribeKeywords('picker', index => Diagnostics.log(`currentIndex: ${index}`));
+    Picker.subscribeKeywords('picker', index => Diagnostics.log(`currentIndex: ${index.newValue}`));
 }
 
 function sortReverse(textureName1, textureName2) {

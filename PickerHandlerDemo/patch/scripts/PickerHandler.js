@@ -97,7 +97,7 @@ export function configUsingPattern(namePattern, startIndex = 0, sort = (name1, n
 
 /**
  * Please note that Picker's index will **ALWAYS** set to `0` on Facebook when you set visible from `false` to `true`.
- * @param {BoolSignal | boolean} visible 
+ * @param { boolean | BoolSignal } visible
  */
 export function setVisible(visible, fireOnVisible = true) {
     Picker.visible = visible;
@@ -160,15 +160,16 @@ export function subscribeIndex(index, callback) {
 
 /**
  * @param {string} textureNameKeyword 
- * @param {{(index: number): void}} callback 
+ * @param {{(index: {newValue: number, oldValue?:number}): void}} callback 
  */
 export function subscribeKeywords(textureNameKeyword, callback) {
     currentSubscriptions.push({ type: 1, conditions: textureNameKeyword, event: callback });
-    const sub = Picker.selectedIndex.monitor({ fireOnInitialValue: true }).select('newValue').subscribe(index => {
-        const indexInRange = index >= 0 && index < currentConfig.items.length;
-        if (indexInRange && currentConfig.items[index].image_texture.name.indexOf(textureNameKeyword) !== -1) {
+    const sub = Picker.selectedIndex.monitor({ fireOnInitialValue: true }).subscribe(index => {
+        const newValue = index.newValue;
+        const indexInRange = newValue >= 0 && newValue < currentConfig.items.length;
+        if (indexInRange && currentConfig.items[newValue].image_texture.name.indexOf(textureNameKeyword) !== -1) {
             callback(index)
-            currentConfig.selectedIndex = index;
+            currentConfig.selectedIndex = newValue;
         }
     })
     subscriptions.push(sub);

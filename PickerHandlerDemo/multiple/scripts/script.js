@@ -11,7 +11,7 @@ function config_picker_set2() {
     Picker.configUsingPattern('img_picker_set2_*', 1, sort_set2).then(() => {
         Picker.subscribeKeywords('0', initPicker);
         Picker.subscribeKeywords('0', () => Diagnostics.log('back'));
-        Picker.subscribeKeywords('picker', index => Diagnostics.log(`current index: ${index}`));
+        Picker.subscribeKeywords('picker', index => Diagnostics.log(`current index: ${index.newValue}`));
     });
 }
 
@@ -20,7 +20,7 @@ function config_picker_set1() {
     Picker.configUsingPattern('img_picker_set1_*', 1, sort_set1).then(() => {
         Picker.subscribeKeywords('0', initPicker);
         Picker.subscribeKeywords('0', () => Diagnostics.log('back'));
-        Picker.subscribeKeywords('picker', index => Diagnostics.log(`current index: ${index}`));
+        Picker.subscribeKeywords('picker', index => Diagnostics.log(`current index: ${index.newValue}`));
     });
 }
 
