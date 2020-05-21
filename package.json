@@ -1,6 +1,6 @@
 {
   "name": "sparkar-picker-handler",
-  "version": "0.5.1",
+  "version": "0.6.0",
   "description": "A wrapper of NativeUI.picker in Spark AR",
   "main": "PickerHandler.js",
   "author": "Pofu Lu",
