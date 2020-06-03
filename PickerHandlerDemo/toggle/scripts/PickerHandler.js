@@ -21,7 +21,6 @@ const texturesName = [
 
 //––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 
-let visibleIndexSubscription;
 let currentConfig;
 let currentSubscriptions = [];
 let subscriptions = [];
@@ -37,14 +36,6 @@ function configure(textures, startIndex) {
 
 function HandleError(error) {
     Diagnostics.log(error.toString());
-}
-
-function removeItemOnce(arr, value) {
-    var index = arr.indexOf(value);
-    if (index > -1) {
-        arr.splice(index, 1);
-    }
-    return arr;
 }
 
 /**
@@ -99,87 +90,55 @@ export function configUsingPattern(namePattern, startIndex = 0, sort = (name1, n
  * Please note that Picker's index will **ALWAYS** set to `0` on Facebook when you set visible from `false` to `true`.
  * @param { boolean | BoolSignal } visible
  */
-export function setVisible(visible, fireOnVisible = true) {
+export function setVisible(visible) {
     Picker.visible = visible;
 
     if (currentConfig == null) return;
 
     if (visible) {
-        subscriptions.forEach(s => s.unsubscribe());
-        subscriptions = [];
+        Picker.configure(currentConfig);
 
-        if (fireOnVisible) {
-            currentSubscriptions.forEach(subscription => {
-                switch (subscription.type) {
-                    case 0: subscribeIndex(subscription.conditions, subscription.event); break;
-                    case 1: subscribeKeywords(subscription.conditions, subscription.event); break;
-                    default: break;
-                }
-
-                removeItemOnce(currentSubscriptions, subscription);
-            })
-            Picker.configure(currentConfig);
-        } else {
-            Picker.configure(currentConfig);
-            visibleIndexSubscription = Picker.selectedIndex.monitor().subscribe(() => {
-                currentSubscriptions.forEach(subscription => {
-                    switch (subscription.type) {
-                        case 0: subscribeIndex(subscription.conditions, subscription.event); break;
-                        case 1: subscribeKeywords(subscription.conditions, subscription.event); break;
-                        default: break;
-                    }
-
-                    removeItemOnce(currentSubscriptions, subscription);
-                })
-                visibleIndexSubscription.unsubscribe();
-            })
-        }
     } else {
-        if (visibleIndexSubscription != undefined) {
-            visibleIndexSubscription.unsubscribe();
-        }
-
-        subscriptions.forEach(s => s.unsubscribe());
-        subscriptions = [];
         Picker.configure({ selectedIndex: currentConfig.selectedIndex, items: [] });
     }
 }
+
 /**
  * @param {number | ScalarSignal} index
- * @param {{(index: number): void}} callback
+ * @param {{(index: {newValue: number, oldValue?:number}): void}} callback 
+ * @returns {Promise<Subscription>}
  */
 export function subscribeIndex(index, callback) {
     currentSubscriptions.push({ type: 0, conditions: index, event: callback });
-    const sub = Picker.selectedIndex.eq(index).onOn({ fireOnInitialValue: true }).subscribe(index => {
-        currentConfig.selectedIndex = index;
-        callback(index);
+    const sub = Picker.selectedIndex.monitor({ fireOnInitialValue: true }).subscribe(result => {
+        if (result.newValue == index) {
+            currentConfig.selectedIndex = index;
+            callback(result);
+        }
     });
-    subscriptions.push(sub);
-    return sub;
+    subscriptions.push(sub)
 }
 
 /**
  * @param {string} textureNameKeyword 
  * @param {{(index: {newValue: number, oldValue?:number}): void}} callback 
+ * @returns {Promise<Subscription>}
  */
 export function subscribeKeywords(textureNameKeyword, callback) {
     currentSubscriptions.push({ type: 1, conditions: textureNameKeyword, event: callback });
-    const sub = Picker.selectedIndex.monitor({ fireOnInitialValue: true }).subscribe(index => {
-        const newValue = index.newValue;
+    const sub = Picker.selectedIndex.monitor({ fireOnInitialValue: true }).subscribe(result => {
+        const newValue = result.newValue;
         const indexInRange = newValue >= 0 && newValue < currentConfig.items.length;
         if (indexInRange && currentConfig.items[newValue].image_texture.name.indexOf(textureNameKeyword) !== -1) {
-            callback(index)
+            callback(result)
             currentConfig.selectedIndex = newValue;
         }
     })
+
     subscriptions.push(sub);
-    return sub;
 }
 
 export function unsubscribeAll() {
-    if (visibleIndexSubscription != undefined) {
-        visibleIndexSubscription.unsubscribe();
-    }
     subscriptions.forEach(s => s.unsubscribe());
     subscriptions = [];
     currentSubscriptions = [];
